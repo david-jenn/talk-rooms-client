@@ -6,14 +6,14 @@ import axios from 'axios';
 import 'animate.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faArrowLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 import LoadingIcon from './LoadingIcon';
 
 import { SocketContext } from '../context/socket';
-import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:5000'; //http://localhost:5000 https://talk-rooms-server-david-jenn.herokuapp.com/
+
+
 
 function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, loadingTalkRoom, setFocus }) {
   const messagesEndRef = useRef(null);
