@@ -8,24 +8,26 @@ import 'animate.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
-import LoadingIcon from './LoadingIcon';
 
+import LoadingIcon from './LoadingIcon';
+import TypingIcon from './TypingIcon';
 import { SocketContext } from '../context/socket';
 
 
 
 
-function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, loadingTalkRoom, setFocus }) {
+function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, loadingTalkRoom, setFocus, fetchRoomMessages, messageList, setMessageList, messages }) {
   const messagesEndRef = useRef(null);
   const messageInputRef = useRef(null);
   const ccUsername = auth.payload.displayName;
-  let messages = [];
+  
 
   const [message, setMessage] = useState('');
   const [typingMessage, setTypingMessage] = useState('');
-  const [messageList, setMessageList] = useState([]);
-  const [messagesPending, setMessagesPending] = useState(false);
+  //const [messageList, setMessageList] = useState([]);
+
   const [firstMessage, setFirstMessage] = useState(false);
+  
 
   const [roomData, setRoomData] = useState(null);
   const [userList, setUserList] = useState([]);
@@ -33,18 +35,25 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
   const currentTypers = [];
   const [signedIn, setSignedIn] = useState(false);
   const [render, setRender] = useState(0);
+  const [scrolledDown, setScrolledDown] = useState(false);
  
-  let messagesLoaded = false;
+
 
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    if (directChatData && directChatData?.directChatId && !messagesPending && !loadingTalkRoom) {
+    
+    if (directChatData && directChatData?.directChatId && !loadingTalkRoom) {
       scrollToBottom();
+      setTimeout(() => {
+        setScrolledDown(true)
+      }, 25)
+      
     }
   });
 
   useEffect(() => {
+    console.log(messageList)
     console.log(directChatData);
     console.log(socket);
     if (!directChatData) {
@@ -54,10 +63,10 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
       return;
     }
 
-    if (!messagesLoaded) {
-      setFirstMessage(false);
-      fetchRoomMessages();
-    }
+    // if (!messagesLoaded) {
+    //   setFirstMessage(false);
+    //   fetchRoomMessages();
+    // }
 
     const username = auth.payload.displayName;
     const room = directChatData.directChatId;
@@ -78,8 +87,14 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
         setRoomData(room);
       });
 
-      socket.on('typingOutput', (message) => {
-        setTypingMessage(message);
+      socket.on('typingOutput', (id) => {
+        console.log(id);
+        if(id && id !== user._id ) {
+          setTypingMessage(id);
+        } else {
+          setTypingMessage('');
+        }
+        
       });
 
       return () => {
@@ -90,25 +105,7 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
     }
   }, [socket?.connected, directChatData]);
 
-  function fetchRoomMessages() {
-    console.log('fetching messages');
-    setMessagesPending(true);
-    axios(`${process.env.REACT_APP_API_URL}/api/comment/${directChatData.directChatId}/list`, {
-      method: 'get',
-    })
-      .then((res) => {
-        if (_.isArray(res.data)) {
-          messages = res.data;
-          messagesLoaded = true;
-          console.log(messages);
-          setMessagesPending(false);
-          setMessageList(messages);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  
 
   function saveNewMessage(message) {
     console.log(message);
@@ -146,9 +143,9 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
   }
 
   function outputMessage(msgObj) {
-    //console.log(messages);
-    messages.push(msgObj);
-    setMessageList([...messages]);
+    console.log(messageList);
+    console.log([...messageList, msgObj])
+    setMessageList([...messageList, msgObj]);
   }
 
   function onInputChange(evt, setValue) {
@@ -162,8 +159,9 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
     }
   }
 
-  function setInputFocused(evt) {
-    socket.emit('typing', ccUsername, evt, directChatData.directChatId);
+  function setInputFocused(typing) {
+    const userId = user._id;
+    socket.emit('typing', userId, typing, directChatData.directChatId);
   }
   function onLeaveRoom() {
     console.log('leaving');
@@ -175,17 +173,9 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
     <div className="container main-wrapper">
       <div>
         <div className="row">
-          {!directChatData ||
-            !directChatData?.directChaId ||
-            messagesPending ||
-            (loadingTalkRoom && (
-              <div className="d-flex justify-content-center mt-5">
-                <LoadingIcon />
-              </div>
-            ))}
-          {directChatData && directChatData?.directChatId && !loadingTalkRoom && (
+          
             <div className="">
-              <div className="mb-1 d-flex align-items-center">
+              <div className="mb-1 d-flex align-items-center mb-3">
                 <button className="btn btn-primary btn-sm me-3" onClick={(evt) => onLeaveRoom()}>
                   <FontAwesomeIcon icon={faArrowLeft} />
                 </button>
@@ -196,7 +186,7 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
                 <div>
                   {_.map(messageList, (messageListItem, index) => (
                     <div>
-                      <div className="item mb-2">
+                      <div className={scrolledDown ? "item mb-2" : "item mb-2 hidden"}>
                         <div className="item-header d-flex justify-content-between">
                           <div>{messageListItem.username}</div>
                         </div>
@@ -274,11 +264,11 @@ function TalkRoom({ changePage, auth, user, directChatData, setDirectChatData, l
                   </div>
                 </div>
                 <div className="mb-2 d-flex">
-                  <div className="fst-italic">{typingMessage}</div>
+                 {typingMessage && <TypingIcon />} 
                 </div>
               </form>
             </div>
-          )}
+          
         </div>
       </div>
     </div>

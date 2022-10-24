@@ -3,6 +3,11 @@ import axios from 'axios';
 import _, { update } from 'lodash';
 import { SocketContext } from '../context/socket';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import FriendListItem from './FriendListItem';
+
 function FriendList({
   auth,
   user,
@@ -56,10 +61,22 @@ function FriendList({
         setFriendConnections([...connections]);
       }
     });
+
+    socket.on('FRIEND_REMOVED_SENDER', (data) => {
+      toast.error(`You are no longer friends with ${data.receiver?.displayName}`);
+      getFriends();
+    })
+    socket.on('FRIEND_REMOVED_RECEIVER', (data) => {
+      console.log('in receiver');
+      console.log(data);
+      getFriends();
+    })
     return () => {
       socket.off('REQUEST_ACCEPTED_SENDER_LIST');
       socket.off('REQUEST_ACCEPTED_RECEIVER_LIST');
       socket.off('DIRECT_MESSAGE_RECEIVED');
+      socket.off('FRIEND_REMOVED_SENDER');
+      socket.off('FRIEND_REMOVED_RECEIVER');
     };
   }, [auth, user, directChatData]);
 
@@ -192,23 +209,7 @@ function FriendList({
       {friendConnections &&
         friendConnections.length > 0 &&
         _.map(friendConnections, (connection) => (
-          <div className="card p-2 mb-1">
-            <div className="d-flex justify-content-between align-items-center">
-              <div>{connection.friend.displayName}</div>
-
-              <div>
-                {connection.unReadCount !== 0 && (
-                  <span className="me-3 badge rounded-pill bg-danger">{connection.unReadCount}</span>
-                )}
-                <button
-                  className="btn btn-sm btn-primary position-relative"
-                  onClick={(evt) => joinDirectChat(connection.friend)}
-                >
-                  Chat
-                </button>
-              </div>
-            </div>
-          </div>
+          <FriendListItem auth={auth} user={user} connection={connection} joinDirectChat={joinDirectChat}/>
         ))}
 
       {!friendConnections || (friendConnections.length === 0 && <div className="fst-italic">No Friends Found</div>)}

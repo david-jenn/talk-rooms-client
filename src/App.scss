@@ -33,13 +33,15 @@ $light: #f8f9fa;
 $dark: #212529;
 $bs-body-bg: #212529;
 
-// @import "~bootswatch/dist/default/variables";
+@import "~bootswatch/dist/vapor/variables";
 @import "~bootstrap/scss/bootstrap";
-// @import "~bootswatch/dist/quartz/bootswatch";
+@import "~bootswatch/dist/vapor/bootswatch";
 
 .background {
 
 }
+
+
 
 // cerulean
 .friend-wrapper {
@@ -55,6 +57,13 @@ min-height: 50vh;
 .login {
 max-width: 600px;
 margin:auto
+}
+
+.hidden {
+  visibility: hidden;
+}
+.loading {
+  height: 400px;
 }
 
 

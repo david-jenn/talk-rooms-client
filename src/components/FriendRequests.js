@@ -56,8 +56,10 @@ function FriendRequests({ auth, user, showSuccess }) {
   const requestAcceptedReceiver = useCallback((data) => {
     console.log('in receiver');
     const updatedRequests = [];
+    console.log(data)
+    console.log(sentRequests);
     for (const request of sentRequests) {
-      if (request.sender?.id === data.sender._id && request.friend?.id !== data.receiver?.id) {
+      if (request.friend?.id !== data.sender?._id) {
         updatedRequests.push(request);
       }
     }
