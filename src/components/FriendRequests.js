@@ -285,12 +285,12 @@ function FriendRequests({ auth, user, showSuccess }) {
   }
 
   return (
-    <div>
+    <div className="mb-3">
       <h3 className="fs-5">Friend Requests</h3>
       {friendRequests &&
         friendRequests.length > 0 &&
         _.map(friendRequests, (request) => (
-          <div className="card p-1">
+          <div className="card p-2 mb-1 m-1 border border-secondary">
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex">
                 <div className="me-3">{request.sender.displayName}</div>
@@ -315,7 +315,7 @@ function FriendRequests({ auth, user, showSuccess }) {
         sentFriendRequests.length > 0 &&
         _.map(sentFriendRequests, (sentRequest) => (
           <div>
-            <div className="card p-1 mb-1">
+            <div className="card p-2 mb-1 m-1 border border-secondary">
               <div className="d-flex justify-content-between align-items-center">
                 <div>{sentRequest.friend.displayName}</div>
                 <button class="btn btn-warning btn-sm" onClick={(evt) => cancelSentRequest(sentRequest.friend)}>

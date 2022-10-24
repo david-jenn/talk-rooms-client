@@ -4,6 +4,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 import Friends from './Friends';
+
 import TalkRoom from './TalkRoom';
 import LoadingIcon from './LoadingIcon';
 
@@ -92,7 +93,9 @@ function Dashboard({ auth, changePage, changeSubPage, user, showSuccess }) {
               setLoadingTalkRoom={setLoadingTalkRoom}
               setFocus={setFocus}
             />
+           
           </div>
+          
         </div>
       )}
       {(focus === 'room' || windowSize.innerWidth >= 768) && (

@@ -117,7 +117,7 @@ function FindFriends({ auth, user, friendList }) {
   }
 
   return (
-    <div className="mb-1 pb-3 border-2 border-bottom">
+    <div className="mb-3 pb-3 border-2 border-bottom">
      
       <label htmlFor="room-search-input" className="form-label d-none">
         Search Users

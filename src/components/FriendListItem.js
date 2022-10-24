@@ -48,7 +48,7 @@ function FriendListItem({ auth, user, connection, joinDirectChat }) {
   }
 
   return (
-    <div className="card p-2 mb-1">
+    <div className="card p-2 mb-1 border border-secondary">
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex">
           <div className="me-3">{connection.friend.displayName}</div>

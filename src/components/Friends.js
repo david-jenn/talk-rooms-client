@@ -5,6 +5,7 @@ import onInputChange from '../utils/onInputChange';
 import friends from '../../src/css/friends.css';
 
 import InputField from './InputField';
+import Groups from './Groups';
 import FindFriends from './FindFriends';
 import FriendList from './FriendList';
 import FriendRequests from './FriendRequests';
@@ -37,6 +38,8 @@ function Friends({ auth, user, directChatData, setDirectChatData, setDirectChatI
         <div>
           <FriendRequests auth={auth} user={user} showSuccess={showSuccess} />
         </div>
+        <h2>Groups</h2>
+        <div><Groups auth={auth} user={user} /></div>
       </div>
     </div>
   );
