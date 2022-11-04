@@ -316,7 +316,7 @@ function TalkRoom({
                     onBlur={(evt) => setInputFocused(false)}
                     onFocus={(evt) => setInputFocused(true)}
                   ></input>
-                  <button id="emojis-btn" className="btn btn-secondary" onClick={(evt) => showEmojiPicker(evt)}>
+                  <button type="button" id="emojis-btn" className="btn btn-secondary" onClick={(evt) => showEmojiPicker(evt)}>
                     <FontAwesomeIcon id="emojis-icon" icon={faFaceSmile} />
                   </button>
                   <button type="submit" className="btn btn-primary" onClick={(evt) => onSendMessage(evt)}>
