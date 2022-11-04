@@ -67,7 +67,31 @@ margin:auto
   transform: translateY(10%);
 }
 
+.fa-back {
+  transform: translateY(5%);
+}
 
+.chat-input {
+  position: relative;
+}
+
+.emoji-picker {
+  position: absolute;
+  top: -350px;
+  
+  right: 0;
+ 
+}
+.picker-size {
+  position: absolute;
+  top: -350px;
+  right: 0;
+  width: 85vw;
+}
+
+.info-box {
+  height: 350px;
+}
 
 .friend-container {
   height: 63vh
@@ -75,7 +99,7 @@ margin:auto
 
 
 .friend-option {
-  transform: translateY(-4%);
+  transform: translateY(2%);
 }
 
 .friend-option:hover {

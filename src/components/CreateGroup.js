@@ -46,18 +46,18 @@ function CreateGroup({auth, user}) {
             </Button>
 
             <Modal show={show} onHide={handleClose}>
-            <Modal.Header className="bg-dark" closeButton>
+            <Modal.Header className="" closeButton>
               <Modal.Title>Create Group</Modal.Title>
             </Modal.Header>
 
-            <Modal.Body className="bg-dark">
+            <Modal.Body className="">
               <div className="">
                 <label for="group-name" className="form-label">Group Name</label>
                 <input type="text" id="group-name" className="form-control" onChange={(evt) => onInputChange(evt, setGroupName)}></input>
               </div>
             </Modal.Body>
 
-            <Modal.Footer className="bg-dark">
+            <Modal.Footer className="">
               <div className="d-flex justify-content-end">
                 <Button className="me-3" variant="secondary" onClick={handleClose}>
                   Cancel

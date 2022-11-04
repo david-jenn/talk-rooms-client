@@ -120,6 +120,7 @@ function Dashboard({ auth, changePage, changeSubPage, user, showSuccess }) {
                 setMessageList={setMessageList}
                 messageList={messageList}
                 message={messages}
+                windowSize={windowSize}
               />
             )}
           </div>

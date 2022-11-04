@@ -7,7 +7,10 @@ import 'animate.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
+import EmojiPicker from 'emoji-picker-react';
 
+import ClickDetector from './ClickDetector';
 import LoadingIcon from './LoadingIcon';
 import TypingIcon from './TypingIcon';
 import { SocketContext } from '../context/socket';
@@ -24,11 +27,12 @@ function TalkRoom({
   messageList,
   setMessageList,
   messages,
+  windowSize,
 }) {
   const messagesEndRef = useRef(null);
   const messageInputRef = useRef(null);
   const ccUsername = auth.payload.displayName;
-  const messageCopy = messageList;
+  const messageListCopy = messageList;
 
   const [message, setMessage] = useState('');
   const [typingMessage, setTypingMessage] = useState('');
@@ -43,10 +47,15 @@ function TalkRoom({
   const [signedIn, setSignedIn] = useState(false);
   const [render, setRender] = useState(0);
   const [scrolledDown, setScrolledDown] = useState(false);
+  const [displayEmojis, setDisplayEmojis] = useState(false);
 
   const username = auth.payload.displayName;
   const room = directChatData.directChatId;
   const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    document.addEventListener('click', handleDocumentClick, false);
+  }, []);
 
   useEffect(() => {
     if (directChatData && directChatData?.directChatId && !loadingTalkRoom) {
@@ -75,7 +84,7 @@ function TalkRoom({
           outputMessage(message);
         }
       });
-      
+
       socket.on('roomUsers', ({ room, users }) => {
         setUserList(users);
         setRoomData(room);
@@ -138,13 +147,73 @@ function TalkRoom({
   }
 
   function outputMessage(msgObj) {
-    messageCopy.push(msgObj);
-    setMessageList([...messageCopy]);
+    messageListCopy.push(msgObj);
+    setMessageList([...messageListCopy]);
   }
 
   function onInputChange(evt, setValue) {
     const newValue = evt.currentTarget.value;
     setValue(newValue);
+  }
+
+  function showEmojiPicker(evt) {
+    evt.preventDefault();
+    if (displayEmojis) {
+      setDisplayEmojis(false);
+    } else {
+      setDisplayEmojis(true);
+    }
+  }
+
+  function getPickerWidth() {
+    const width = windowSize.innerWidth;
+
+    if (width >= 768) {
+      return '40vw';
+    } else if (width >= 590) {
+      return '65vw';
+    } else {
+      return '85vw';
+    }
+  }
+
+  const handleDocumentClick = (event) => {
+    console.log(event.target.nodeName);
+    console.log('clicked in document!');
+    let isEmojiClassFound = false;
+
+    event &&
+      event.path &&
+      event.path.forEach((elem) => {
+        if (elem && elem.classList) {
+          const data = elem.classList.value;
+          console.log(data);
+          if (data.includes('emoji-picker')) {
+            isEmojiClassFound = true;
+          }
+        }
+      }); // end
+
+    if (isEmojiClassFound) {
+      return;
+    }
+    if (event.target.id === 'emojis-icon') {
+      return;
+    }
+    if (event.target.id === 'emojis-btn') {
+      return;
+    }
+    if (event.target.nodeName === 'path') {
+      return;
+    }
+    console.log('made it past ifs....')
+    setDisplayEmojis(false);
+  };
+
+  function onClickEmoji(emojiObject) {
+    console.log(emojiObject);
+    setMessage(message + emojiObject.emoji);
+    setDisplayEmojis(false);
   }
 
   function scrollToBottom() {
@@ -168,11 +237,11 @@ function TalkRoom({
       <div>
         <div className="row">
           <div className="">
-            <div className="d-flex align-items-center mb-3">
-              <button className="btn btn-primary btn-sm me-3 fa-icon" onClick={(evt) => onLeaveRoom()}>
+            <div className="d-flex align-items-center mb-3 mt-2">
+              <button className="btn btn-primary btn-sm me-3 fa-back" onClick={(evt) => onLeaveRoom()}>
                 <FontAwesomeIcon icon={faArrowLeft} />
               </button>
-              <div className="">{directChatData.friend?.displayName}</div>
+              <div className="fw-bold">{directChatData.friend?.displayName}</div>
             </div>
 
             <div className="scroll-item border border-dark mb-3   p-3">
@@ -236,7 +305,7 @@ function TalkRoom({
                 <label htmlFor="message" className="form-label visually-hidden">
                   Your Message
                 </label>
-                <div className="input-group">
+                <div className="input-group chat-input">
                   <input
                     id="message"
                     className="form-control"
@@ -247,9 +316,22 @@ function TalkRoom({
                     onBlur={(evt) => setInputFocused(false)}
                     onFocus={(evt) => setInputFocused(true)}
                   ></input>
+                  <button id="emojis-btn" className="btn btn-secondary" onClick={(evt) => showEmojiPicker(evt)}>
+                    <FontAwesomeIcon id="emojis-icon" icon={faFaceSmile} />
+                  </button>
                   <button type="submit" className="btn btn-primary" onClick={(evt) => onSendMessage(evt)}>
                     <FontAwesomeIcon icon={faPaperPlane} />
                   </button>
+                  {displayEmojis && (
+                    <div className="emoji-picker">
+                      <EmojiPicker
+                        onEmojiClick={onClickEmoji}
+                        searchDisabled={true}
+                        width={getPickerWidth()}
+                        height="350px"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="mb-2 d-flex">{typingMessage && <TypingIcon />}</div>

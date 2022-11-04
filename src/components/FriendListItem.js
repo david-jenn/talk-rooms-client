@@ -53,7 +53,7 @@ function FriendListItem({ auth, user, connection, joinDirectChat }) {
     <div className="card p-2 mb-1 border border-secondary">
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex">
-          <div className="me-3">{connection.friend.displayName}</div>
+          <div className="me-3 align-self-center fw-bold">{connection.friend.displayName}</div>
           <div>
             <div className="friend-option fs-5" data-bs-toggle="dropdown" aria-expanded="false">
               <FontAwesomeIcon icon={faEllipsisVertical} />
