@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import _ from 'lodash';
-import { SocketContext, socket } from '../context/socket';
+import { SocketContext } from '../context/socket';
 
 import Dashboard from './Dashboard';
 import TalkRoom from './TalkRoom';
@@ -12,6 +12,8 @@ function Container({ auth, room, changePage, getRoom, onInputChange, changeSubPa
   const [user, setUser] = useState({});
   const [joined, setJoined] = useState(false);
   const [reconnectionAttempts, setReconnectionAttempts] = useState(0);
+
+  const socket = useContext(SocketContext)
 
   //socket
   useEffect(() => {
@@ -64,7 +66,7 @@ function Container({ auth, room, changePage, getRoom, onInputChange, changeSubPa
   }
 
   return (
-    <SocketContext.Provider value={socket}>
+    <div>
       {subPage === 'FindRooms' && (
         <FindRooms
           auth={auth}
@@ -78,7 +80,7 @@ function Container({ auth, room, changePage, getRoom, onInputChange, changeSubPa
       {subPage === 'Dashboard' && auth && (
         <Dashboard changePage={changePage} auth={auth} user={user} changeSubPage={changeSubPage} showSuccess={showSuccess} />
       )}
-    </SocketContext.Provider>
+   </div>
   );
 }
 

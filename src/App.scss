@@ -1,41 +1,38 @@
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #868e96 !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
 
+$blue:    #033c73 !default;
+$indigo:  #6610f2 !default;
+$purple:  #6f42c1 !default;
+$pink:    #e83e8c !default;
+$red:     #c71c22 !default;
+$orange:  #fd7e14 !default;
+$yellow:  #dd5600 !default;
+$green:   #73a839 !default;
+$teal:    #20c997 !default;
+$cyan:    #2fa4e7 !default;
 
-$blue: #0d6efd;
-$indigo: #6610f2;
-$purple: #6f42c1;
-$pink: #d63384;
-$red: #dc3545;
-$orange: #fd7e14;
-$yellow: #ffc107;
-$green: #198754;
-$teal: #20c997;
-$cyan: #0dcaf0;
-$black: #000;
-$white: #fff;
-$gray: #6c757d;
-$gray-dark: #343a40;
-$gray-100: #f8f9fa;
-$gray-200: #e9ecef;
-$gray-300: #dee2e6;
-$gray-400: #ced4da;
-$gray-500: #adb5bd;
-$gray-600: #6c757d;
-$gray-700: #495057;
-$gray-800: #343a40;
-$gray-900: #212529;
-$primary: #0d6efd;
-$secondary: #6c757d;
-$success: #198754;
-$info: #0dcaf0;
-$warning: #ffc107;
-$danger: #dc3545;
-$light: #f8f9fa;
-$dark: #212529;
-$bs-body-bg: #212529;
+$primary:       $cyan !default;
+$secondary:     $gray-200 !default;
+$success:       $green !default;
+$info:          $blue !default;
+$warning:       $yellow !default;
+$danger:        $red !default;
+$light:         $gray-100 !default;
+$dark:          $gray-800 !default;
 
-@import "~bootswatch/dist/vapor/variables";
+@import "~bootswatch/dist/cerulean/variables";
 @import "~bootstrap/scss/bootstrap";
-@import "~bootswatch/dist/vapor/bootswatch";
+@import "~bootswatch/dist/cerulean/bootswatch";
 
 .background {
 
@@ -66,14 +63,28 @@ margin:auto
   height: 400px;
 }
 
-
-.scroll-item {
-
-border-radius: 14px;
+.fa-icon {
+  transform: translateY(10%);
 }
+
+
 
 .friend-container {
   height: 63vh
+}
+
+
+.friend-option {
+  transform: translateY(-4%);
+}
+
+.friend-option:hover {
+  cursor: pointer;
+  opacity: 0.5;
+  
+
+  transition: opacity 2s;
+  
 }
 .scroll-item {
   height: 40vh
@@ -184,7 +195,7 @@ color: $dark
 
 }
 .outbound-msg {
-background-color: #8A6CA6;
+background-color: $cyan;
 color:white;
 padding-left: 20px;
 padding-right: 20px;
@@ -211,11 +222,11 @@ background: $light;
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-background: $dark
+background: $gray-600;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-background: $dark ;
+background: $gray-600;
 }
 

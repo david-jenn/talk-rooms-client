@@ -17,7 +17,7 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Container from './components/Container';
 
-import { io } from 'socket.io-client';
+import { SocketContext, socket } from './context/socket';
 
 function App() {
   const [auth, setAuth] = useState(null);
@@ -34,12 +34,15 @@ function App() {
     setSubPage('Dashboard')
   }
 
-  function onLogout(auth) {
+  function onLogout() {
+    console.log(auth);
+    socket.emit('USER_LEAVE', auth.userId);
     setAuth(null);
     setPage('SignIn');
     if (localStorage) {
       localStorage.removeItem('authToken');
     }
+    
   }
 
   function changePage(pageName) {
@@ -76,7 +79,8 @@ function App() {
   //const navigate = useNavigate();
 
   return (
-    <div className="d-flex flex-column min-vh-100 background text-light">
+    <SocketContext.Provider value={socket}>
+    <div className="d-flex flex-column min-vh-100 background">
       <Navbar auth={auth} onLogout={onLogout} changePage={changePage} changeSubPage={changeSubPage} />
       <ToastContainer />
       <main className="container-fluid flex-grow-1">
@@ -92,6 +96,7 @@ function App() {
       </main>
       <Footer />
     </div>
+     </SocketContext.Provider>
   );
 }
 

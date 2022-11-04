@@ -6,6 +6,9 @@ import { SocketContext } from '../context/socket';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faTrashAlt, faTrashCan, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+
 function FriendRequests({ auth, user, showSuccess }) {
   const [error, setError] = useState('');
   const [friendRequests, setFriendRequests] = useState([]);
@@ -29,7 +32,7 @@ function FriendRequests({ auth, user, showSuccess }) {
   });
 
   const requestCancelReceiver = useCallback((data) => {
-    console.log('cancel receiver')
+    console.log('cancel receiver');
     const updatedRequests = [];
     for (const request of receivedRequests) {
       if (request.sender?.id === data.sender._id && request.friend?.id !== data.receiver?.id) {
@@ -41,7 +44,7 @@ function FriendRequests({ auth, user, showSuccess }) {
   });
 
   const requestAcceptedSender = useCallback((data) => {
-    console.log('in sender')
+    console.log('in sender');
     const updatedRequests = [];
     for (const request of receivedRequests) {
       if (request.sender?.id === data.sender._id && request.friend?.id !== data.receiver?.id) {
@@ -56,7 +59,7 @@ function FriendRequests({ auth, user, showSuccess }) {
   const requestAcceptedReceiver = useCallback((data) => {
     console.log('in receiver');
     const updatedRequests = [];
-    console.log(data)
+    console.log(data);
     console.log(sentRequests);
     for (const request of sentRequests) {
       if (request.friend?.id !== data.sender?._id) {
@@ -291,26 +294,27 @@ function FriendRequests({ auth, user, showSuccess }) {
         friendRequests.length > 0 &&
         _.map(friendRequests, (request) => (
           <div className="card p-2 mb-1 m-1 border border-secondary">
-            <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex">
-                <div className="me-3">{request.sender.displayName}</div>
-                <button class="btn btn-primary btn-sm" onClick={(evt) => acceptRequest(request.sender)}>
-                  Accept
-                </button>
-              </div>
-              <button class="btn btn-danger btn-sm" onClick={(evt) => rejectRequest(request.sender)}>
-                Reject
+
+            <div className="d-flex">
+              <div className="me-3">{request.sender.displayName}</div>
+            
+            <div className="d-flex align-items-center justify-content-end flex-grow-1">
+              <button class="btn btn-primary btn-sm me-3" onClick={(evt) => acceptRequest(request.sender)}>
+                <FontAwesomeIcon icon={faCheckCircle} />
               </button>
+            
+            <button class="btn btn-danger btn-sm" onClick={(evt) => rejectRequest(request.sender)}>
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </button>
             </div>
           </div>
+          </div>
         ))}
-      {!friendRequests ||
-        (friendRequests.length === 0 && <div className="fst-italic">No incoming requests pending</div>)}
-        <div className="mb-3"></div>
+      {!friendRequests || (friendRequests.length === 0 && <div className="fst-italic">No incoming requests</div>)}
+      <div className="mb-3"></div>
       <div className="mb-1 border-bottom border-secondary border-2"></div>
       <h3 className="fs-5">Sent Requests</h3>
-      {!sentFriendRequests ||
-        (sentFriendRequests.length === 0 && <div className="fst-italic">No sent requests pending</div>)}
+      {!sentFriendRequests || (sentFriendRequests.length === 0 && <div className="fst-italic">No sent requests</div>)}
       {sentFriendRequests &&
         sentFriendRequests.length > 0 &&
         _.map(sentFriendRequests, (sentRequest) => (
@@ -319,7 +323,7 @@ function FriendRequests({ auth, user, showSuccess }) {
               <div className="d-flex justify-content-between align-items-center">
                 <div>{sentRequest.friend.displayName}</div>
                 <button class="btn btn-warning btn-sm" onClick={(evt) => cancelSentRequest(sentRequest.friend)}>
-                  Cancel
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
             </div>

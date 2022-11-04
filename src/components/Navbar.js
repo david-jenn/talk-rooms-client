@@ -6,7 +6,7 @@ function Navbar({ auth, onLogout, changePage, changeSubPage }) {
 
   return (
     <div>
-      <nav class="navbar navbar-expand-sm  mb-1  border-bottom navbar-dark ">
+      <nav class="navbar navbar-expand-sm  mb-1 bg-primary navbar-dark  border-bottom ">
         <div class="container-fluid">
            
             <a

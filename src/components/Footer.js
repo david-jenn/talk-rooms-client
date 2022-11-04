@@ -2,7 +2,7 @@ function Footer () {
 
 
   return (
-    <div className="footer p-1">Talk Rooms - 2022</div>
+    <div className="footer p-1 bg-primary text-light">Talk Rooms - 2022</div>
   )
 }
 

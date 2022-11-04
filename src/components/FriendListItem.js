@@ -6,14 +6,16 @@ import _ from 'lodash';
 import { socket } from '../context/socket';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEllipsisVertical, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function FriendListItem({ auth, user, connection, joinDirectChat }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  const handleShow = (evt) => {
+    evt.preventDefault()
+    setShow(true);
+  }
   function removeFriend() {
     axios(`${process.env.REACT_APP_API_URL}/api/friend/remove-friend`, {
       method: 'put',
@@ -53,31 +55,43 @@ function FriendListItem({ auth, user, connection, joinDirectChat }) {
         <div className="d-flex">
           <div className="me-3">{connection.friend.displayName}</div>
           <div>
-            <Button className="btn-sm" variant="danger" onClick={handleShow}>
-              <FontAwesomeIcon icon={faTrash} />
-            </Button>
-          
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header className="bg-dark" closeButton>
-              <Modal.Title>Remove Friend</Modal.Title>
-            </Modal.Header>
+            <div className="friend-option fs-5" data-bs-toggle="dropdown" aria-expanded="false">
+              <FontAwesomeIcon icon={faEllipsisVertical} />
+            </div>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="/" onClick={(evt) => joinDirectChat(evt, connection.friend)}>
+                  Chat
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="." onClick={(evt) => handleShow(evt)}>
+                  Remove Friend
+                </a>
+              </li>
+            </ul>
 
-            <Modal.Body className="bg-dark">
-              Are you sure you want to permanently remove{' '}
-              <span className="fw-bold fs-5">{connection.friend.displayName}</span> from your friends list?
-            </Modal.Body>
+            <Modal show={show} onHide={handleClose}>
+              <Modal.Header className="" closeButton>
+                <Modal.Title>Remove Friend</Modal.Title>
+              </Modal.Header>
 
-            <Modal.Footer className="bg-dark">
-              <div className="d-flex justify-content-end">
-                <Button className="me-3" variant="secondary" onClick={handleClose}>
-                  Cancel
-                </Button>
-                <Button variant="danger" onClick={(evt) => removeFriend()}>
-                  Remove
-                </Button>
-              </div>
-            </Modal.Footer>
-          </Modal>
+              <Modal.Body className="">
+                Are you sure you want to permanently remove{' '}
+                <span className="fw-bold">{connection.friend.displayName}</span> from your friends list?
+              </Modal.Body>
+
+              <Modal.Footer className="">
+                <div className="d-flex justify-content-end">
+                  <Button className="me-3" variant="secondary" onClick={handleClose}>
+                    Cancel
+                  </Button>
+                  <Button variant="danger" onClick={(evt) => removeFriend()}>
+                    Remove
+                  </Button>
+                </div>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
 
@@ -87,9 +101,9 @@ function FriendListItem({ auth, user, connection, joinDirectChat }) {
           )}
           <button
             className="btn btn-sm btn-primary position-relative"
-            onClick={(evt) => joinDirectChat(connection.friend)}
+            onClick={(evt) => joinDirectChat(evt, connection.friend)}
           >
-            Chat
+            <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
       </div>

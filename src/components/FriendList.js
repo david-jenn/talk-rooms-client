@@ -49,7 +49,6 @@ function FriendList({
         return;
       }
       // TODO UPDATE DB.
-      console.log(friendConnections);
       if (connections.length > 0) {
         for (const connection of connections) {
           if (connection.friend.id === data.friendId) {
@@ -120,12 +119,14 @@ function FriendList({
       });
   }
 
-  function joinDirectChat(friend) {
+  function joinDirectChat(evt, friend) {
+    if(evt) {
+      evt.preventDefault();
+    }
     setLoadingTalkRoom(true);
     setDirectChatData(null);
     const connections = [...friendConnections];
     const connection = connections.find((connection) => connection.friend.id === friend.id);
-    console.log(connection);
     updateUnread(connection._id, 0);
     connection.unReadCount = 0;
     setFriendConnections([...connections]);
@@ -172,14 +173,8 @@ function FriendList({
 
   function updateUnread(connectionId, unreadCount) {
     console.log('in update');
-    console.log(connectionId);
-    console.log(unreadCount);
-    // if(!connectionId) {
-    //   return;
-    // }
-    // if(!unreadCount || unreadCount !== 0) {
-    //   return;
-    // }
+    
+
     axios(`${process.env.REACT_APP_API_URL}/api/friend/update-unread`, {
       method: 'put',
       data: { connectionId, unreadCount },
