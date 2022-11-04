@@ -1,3 +1,5 @@
+import brand from '../images/brand.png';
+
 function Navbar({ auth, onLogout, changePage, changeSubPage }) {
   function onClickLogout(evt) {
     evt.preventDefault();
@@ -10,11 +12,11 @@ function Navbar({ auth, onLogout, changePage, changeSubPage }) {
         <div class="container-fluid">
            
             <a
-              class="navbar-brand"
+              class="navbar-brand "
               href="#"
               onClick={auth ? (evt) => changeSubPage('Dashboard') : (evt) => changePage('SignIn')}
             >
-              Talk Rooms
+              <img className='' src={brand} alt="logo"></img>
             </a>
           
         
@@ -31,6 +33,13 @@ function Navbar({ auth, onLogout, changePage, changeSubPage }) {
           </button>
           <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {!auth && (
+                <li class="nav-item ">
+                  <a class="nav-link active" aria-current="page" href="#" onClick={(evt) => changePage('SignIn')}>
+                    Login
+                  </a>
+                </li>
+              )}
               {!auth && (
                 <li class="nav-item ">
                   <a class="nav-link active" aria-current="page" href="#" onClick={(evt) => changePage('Register')}>
